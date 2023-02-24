@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
+import arc.struct.ObjectMap;
 import arc.struct.Seq;
 import mindustry.game.EventType;
 import mindustry.gen.Groups;
@@ -21,7 +22,7 @@ public class PlayerInfo{
     public static final ArrayList<PlayerInfo> ListInfo = new ArrayList();
     public Buildmode mode;
     public final Player player;
-    private Seq<Menudispose> warehouse = new Seq<>();
+    private ObjectMap<Class,Seq<Menudispose>> warehouse = new ObjectMap<>();
 
     public static Player GetPlayer(PlayerInfo player) {
         return ListInfo.contains(player) ? player.player : null;
@@ -36,21 +37,30 @@ public class PlayerInfo{
         });
         return playerInfo[0];
     }
-    public PlayerInfo(Player player,Seq<Menudispose> dispose){
+    public PlayerInfo(Player player,ObjectMap dispose){
         this(player);
         this.warehouse = dispose;
     }
-    public Menudispose pull(){
-        if (this.warehouse.size==0){
+    public Menudispose pull(Class cla){
+        if (!this.warehouse.containsKey(cla))
+            this.warehouse.put(cla,new Seq<>());
+        if (this.warehouse.get(cla).size==0){
             return null;
         }else {
-            Menudispose menudispose = this.warehouse.get(this.warehouse.size-1);
-            this.warehouse.remove(menudispose);
+            Menudispose menudispose = this.warehouse.get(cla).get(this.warehouse.get(cla).size-1);
+            this.warehouse.get(cla).remove(menudispose);
             return menudispose;
         }
     }
     public void push(Menudispose dispose){
-        this.warehouse.add(dispose);
+        if (!this.warehouse.containsKey(dispose.content.getClass()))
+            this.warehouse.put(dispose.content.getClass(),new Seq<>());
+        this.warehouse.get(dispose.content.getClass()).add(dispose);
+    }
+    public void push(Menudispose menudispose,Class addClass){
+        if (!this.warehouse.containsKey(addClass))
+            this.warehouse.put(addClass,new Seq<>());
+        this.warehouse.get(addClass).add(menudispose);
     }
     public static void addEvents() {
         if (!isEvents) {
