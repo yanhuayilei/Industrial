@@ -53,6 +53,7 @@ public class InpNode extends SuperBlock {
             }
 
             b1 = blocks[1];
+
             if (b1!=null){
                 if (b1.items!=null){
                     aPairOfIncompatibles pair = core.allpair.get(channel);
