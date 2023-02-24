@@ -34,4 +34,7 @@ public class Blocks {
             allpair.put(b,new Seq<>());
         return allpair.get(b);
     }
+    public static Seq<SuperBlock> getAllBlock(Block b){
+        return allpair.get(b);
+    }
 }
