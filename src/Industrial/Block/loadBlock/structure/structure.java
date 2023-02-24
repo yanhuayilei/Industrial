@@ -120,8 +120,8 @@ public class structure extends SuperBlock {
 
         @Override
         public void click(PlayerInfo player) {
-            Menudispose menudispose = new Menudispose(this);
-            player.push(menudispose);
+            Menudispose menudispose = new Menudispose<SuperBuild>(this);
+            addMenu(player,menudispose);
             Call.menu(player.player.con(),SuperBuild.menuid,"Test","Test",new String[][]{{"ok"}});
         }
 
