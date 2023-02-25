@@ -49,6 +49,11 @@ public class BlockLoad {
         //new ItemNetnode(mindustry.content.Blocks.titaniumWall,"测试节点");
         new conveyorBelt(mindustry.content.Blocks.copperWall,"传输管道");
         new structure(mindustry.content.Blocks.copperWall,"TesT");
+        new structure(mindustry.content.Blocks.copperWall,"TT");
+        new structure(mindustry.content.Blocks.copperWall,"TTT");
+        new structure(mindustry.content.Blocks.copperWall,"TTTT");
+        new structure(mindustry.content.Blocks.copperWall,"TTTTT");
+
     }
 
     public BlockLoad() {
