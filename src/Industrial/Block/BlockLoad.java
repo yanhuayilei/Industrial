@@ -4,11 +4,14 @@ package Industrial.Block;
 import Industrial.Block.loadBlock.structure.loadBlock.Net.*;
 import Industrial.Block.loadBlock.structure.structure;
 import Industrial.table.Buildmode;
+import Industrial.table.Menudispose;
 import Industrial.table.PlayerInfo;
 import Industrial.table.WorldTable;
 import Industrial.update.Builddead;
 import arc.Events;
 import arc.struct.Seq;
+import arc.util.Log;
+import mindustry.Vars;
 import mindustry.game.EventType;
 import mindustry.gen.Call;
 import mindustry.ui.Menus;
@@ -17,7 +20,25 @@ public class BlockLoad {
     //建造菜单
 
     public final static Menus.MenuListener listener = (player, option) -> {
+        if (option<0)
+            return;
+        if (PlayerInfo.GetPlayerInfo(player)==null)
+            return;
+        Menudispose<EventType.BlockBuildEndEvent> menudispose = PlayerInfo.GetPlayerInfo(player).pull(BlockLoad.class);
+        if (menudispose==null||menudispose.content==null||menudispose.content.tile==null|| Vars.world.build(menudispose.content.tile.x,menudispose.content.tile.y)!=menudispose.content.tile.build)
+            return;
+        Seq<SuperBlock> allblock = Blocks.getAllBlock(menudispose.content.tile.block());
+        EventType.BlockBuildEndEvent i = menudispose.content;
 
+
+        SuperBuild build = allblock.get(option).create(i.tile.build);
+        WorldTable.setSuperBuilder(i.tile.build.x() / 8.0F, i.tile.build.y() / 8.0F, build);
+        Builddead builder = new Builddead(build, build, SuperBuild.allbuildupdate.size());
+        build.update = builder;
+        SuperBuild.allbuildupdate.add(builder);
+        i.unit.getPlayer().sendMessage("[green]你建造了" + allblock.get(option).name);
+
+        //Log.info(option);
     };
     public final static int menuid = Menus.registerMenu(listener);
     public static void load() {
@@ -27,7 +48,7 @@ public class BlockLoad {
         new transportCore(mindustry.content.Blocks.thoriumWallLarge,"控制器");
         //new ItemNetnode(mindustry.content.Blocks.titaniumWall,"测试节点");
         new conveyorBelt(mindustry.content.Blocks.copperWall,"传输管道");
-        //new structure();
+        new structure(mindustry.content.Blocks.copperWall,"TesT");
     }
 
     public BlockLoad() {
@@ -35,12 +56,14 @@ public class BlockLoad {
         Events.on(EventType.BlockBuildEndEvent.class, (i) -> {
             if (!i.breaking && i.unit != null && i.unit.isPlayer() && PlayerInfo.GetPlayerInfo(i.unit.getPlayer()) != null) {
                 if (PlayerInfo.GetPlayerInfo(i.unit.getPlayer()).mode != Buildmode.original) {
-                    SuperBlock block = Blocks.getBlock(i.tile.block());
+                    //SuperBlock block = Blocks.getBlock(i.tile.block());
                     Seq<SuperBlock> allBlock = Blocks.getAllBlock(i.tile.block());
                     if (allBlock.size==0)
                         return;
 
                     Call.menu(i.unit.getPlayer().con(),menuid,"建造菜单","选择对应方块",partition(getName(allBlock.toArray()),0));
+                    Menudispose di = new Menudispose<EventType.BlockBuildEndEvent>(i);
+                    PlayerInfo.GetPlayerInfo(i.unit.getPlayer()).push(di, BlockLoad.class);
                     /*if (block != null) {
                         SuperBuild build = block.create(i.tile.build);
                         WorldTable.setSuperBuilder(i.tile.build.x() / 8.0F, i.tile.build.y() / 8.0F, build);
@@ -69,10 +92,11 @@ public class BlockLoad {
         }
         return result;
     }
-    public static String[] getName(SuperBlock[] block){
+    public static String[] getName(Object[] block){
         String[] name = new String[block.length];
         for (int i = 0; i < block.length; i++) {
-            name[i] = block[i].name;
+            if (block[i] instanceof SuperBlock)
+            name[i] = ((SuperBlock)block[i]).name;
         }
         return name;
     }
