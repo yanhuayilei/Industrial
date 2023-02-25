@@ -3,9 +3,12 @@ package Industrial.Block.loadBlock.structure.loadBlock.Net;
 import Industrial.Block.SuperBlock;
 import Industrial.Block.SuperBuild;
 import Industrial.load.setupItems;
+import Industrial.table.Menudispose;
+import Industrial.table.PlayerInfo;
 import arc.util.Log;
 import mindustry.Vars;
 import mindustry.gen.Building;
+import mindustry.gen.Call;
 import mindustry.type.Item;
 import mindustry.world.Block;
 
@@ -27,43 +30,15 @@ public class OutNode extends SuperBlock {
 
         @Override
         public void run() {
-            if (core!=null){
+            if (core!=null&&channel!=0){
                 core.allpair.get(channel).out = this;
             }
-            blocks[0] = Vars.world.build(Math.round((build.x()/8)-build.block().size),(Math.round(build.y() / 8)));
-            blocks[1] = Vars.world.build(Math.round((build.x()/8)),(Math.round(build.y() / 8))+build.block().size);
-            blocks[2] = Vars.world.build(Math.round((build.x()/8)+build.block().size),(Math.round(build.y() / 8)));
-            blocks[3] = Vars.world.build(Math.round((build.x()/8)),(Math.round(build.y() / 8))-build.block().size);
         }
 
         public boolean acceptOutput(Item item){
             if (item!=null){
-                if (blocks[0]!=null){
-                    if (blocks[0].items!=null&&blocks[0].acceptItem(blocks[0],item)&&blocks[0].items.get(item)<blocks[0].block().itemCapacity){
-                        Log.info("o0");
-                        return true;
-                    }
-                }
-
-                if (blocks[1]!=null){
-                    /*Log.info(blocks[1].items);
-                    Log.info(blocks[1].acceptItem(blocks[1],item));
-                    Log.info(blocks[1].items.get(item)<blocks[1].block().itemCapacity);*/
-                    if (blocks[1].items!=null&&blocks[1].acceptItem(blocks[1],item)&&blocks[1].items.get(item)<blocks[1].block().itemCapacity){
-                        Log.info("1o");
-                        return true;
-                    }
-                }
-
-                if (blocks[2]!=null){
-                    if (blocks[2].items!=null&&blocks[2].acceptItem(blocks[2],item)&&blocks[2].items.get(item)<blocks[2].block().itemCapacity){
-                        Log.info("o2");
-                        return true;
-                    }
-                }
-                if (blocks[3]!=null){
-                    if (blocks[3].items!=null&&blocks[3].acceptItem(blocks[3],item)&&blocks[3].items.get(item)<blocks[3].block().itemCapacity){
-                        Log.info("o3");
+                if (build!=null){
+                    if (build.items!=null&&build.acceptItem(build,item)&&build.items.get(item)<build.block().itemCapacity){
                         return true;
                     }
                 }
@@ -78,39 +53,53 @@ public class OutNode extends SuperBlock {
         public void addItem(Item item,int amount){
             if (item!=null){
                 if (acceptOutput(item)){
-                    if (blocks[0]!=null){
-                        if (blocks[0].items!=null&&blocks[0].acceptItem(blocks[0],item)&&blocks[0].items.get(item)<blocks[0].block().itemCapacity){
-                            setupItems.addItem(blocks[0],item,amount);
-                            Log.info("0out");
-                            return;
+                    if (build!=null){
+                        if (build.items!=null&&build.acceptItem(build,item)&&build.items.get(item)<build.block().itemCapacity){
+                            setupItems.addItem(build,item,amount);
                         }
-                    }
-                    if (blocks[1]!=null){
-                        if (blocks[1].items!=null&&blocks[1].acceptItem(blocks[1],item)&&blocks[1].items.get(item)<blocks[1].block().itemCapacity){
-                            setupItems.addItem(blocks[1],item,amount);
-                            Log.info("1out");
-                            return;
-                        }
-
-                    }
-                    if (blocks[2]!=null){
-                        if (blocks[2].items!=null&&blocks[2].acceptItem(blocks[2],item)&&blocks[2].items.get(item)<blocks[2].block().itemCapacity){
-                            setupItems.addItem(blocks[2],item,amount);
-                            Log.info("2out");
-                            return;
-                        }
-
-                    }
-                    if (blocks[3]!=null){
-                        if (blocks[3].items!=null&&blocks[3].acceptItem(blocks[3],item)&&blocks[3].items.get(item)<blocks[3].block().itemCapacity){
-                            setupItems.addItem(blocks[3],item,amount);
-                            Log.info("3out");
-                            return;
-                        }
-
                     }
                 }
             }
+        }
+
+
+
+        @Override
+        public void clickProcess(PlayerInfo player, int option) {
+            if (core==null)
+                return;
+            if (option==0){//减
+                for (int i = channel;i>0;i--) {
+                    if (i==0) {
+                        player.player.sendMessage("没找到");
+                        continue;
+                    }
+                    aPairOfIncompatibles q = core.allpair.get(i);
+                    if (q.out==null){
+                        channel = i;
+                        player.player.sendMessage("切换频道:"+i);
+                        break;
+                    }
+                }
+            }else if (option == 1) {//加
+                for (int i = channel;i<10;i++){
+                    if (i==0)
+                        continue;
+                    aPairOfIncompatibles q = core.allpair.get(i);
+                    if (q.out==null){
+                        channel = i;
+                        player.player.sendMessage("切换频道:"+i);
+                        break;
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void click(PlayerInfo player) {
+            Menudispose menudispose = new Menudispose<>(this);
+            addMenu(player,menudispose);
+            Call.menu(player.player.con(),SuperBuild.menuid,"频道选择","当前频道是:"+channel,new String[][]{{"<",">"}});
         }
     }
 }

@@ -3,6 +3,7 @@ package Industrial.Block.loadBlock.structure.loadBlock.Net;
 import Industrial.Block.SuperBlock;
 import Industrial.Block.SuperBuild;
 import Industrial.table.WorldTable;
+import arc.struct.Seq;
 import mindustry.gen.Building;
 import mindustry.world.Block;
 
@@ -29,15 +30,17 @@ public class conveyorBelt extends SuperBlock {
         public void run() {
 
         }
-        public SuperBuild convert1 = null;
-        public SuperBuild convert2 = null;
-        public SuperBuild convert3 = null;
-        public SuperBuild convert4 = null;
+        public Seq<SuperBuild> allconvert = new Seq<>();
         public SuperBuild getCore(Set<SuperBuild> findBuilds){
-            convert1 = getthisBuild(-build.block().size,0);
-            convert2 = getthisBuild(0,build.block().size);
-            convert3 = getthisBuild(build.block().size,0);
-            convert4 = getthisBuild(0,-build.block().size);
+            allconvert = new Seq<>();
+            neighborhood().each(i->{
+                //Log.info(i);
+                if (i==null)
+                    return;
+                SuperBuild build1 = WorldTable.getSuperBuilder(Math.round(i.x()/8),Math.round(i.y()/8));
+                //Log.info(build1+"：："+i);
+                allconvert.add(build1);
+            });
             if (findBuilds.contains(this)) {
                 //Log.info("error!!!!!!!!!!!!!");
                 return null;
@@ -49,64 +52,31 @@ public class conveyorBelt extends SuperBlock {
             Log.info(convert4);
             Log.info("------------------------");*/
             findBuilds.add(this);
-            if (convert1!=null&&convert1.build.team()==build.team()){
-                if (isCore(convert1)){
-                    transportCore.transportCoreB coreB = (transportCore.transportCoreB) convert1;
-                    if (coreB.open) {
-                        return convert1;
-                    }
-                }else if (isconv(convert1)){
-                    //Log.info("con1");
-                    SuperBuild conv = ((conveyorBelt.conveyorBeltB) convert1).getCore(findBuilds);
-                    if (conv!=null){
-                        return conv;
-                    }
-                    //Log.info("concon2");
-                }
-            }
-            if (convert2!=null&&convert2.build.team()==build.team()){
-                if (isCore(convert2)){
-                    transportCore.transportCoreB coreB = (transportCore.transportCoreB) convert2;
-                    if (coreB.open) {
-                        return convert2;
-                    }
-                }else if (isconv(convert2)){
-                    SuperBuild conv = ((conveyorBelt.conveyorBeltB) convert2).getCore(findBuilds);
-                    if (conv!=null){
-                        return conv;
-                    }
-                    //Log.info("2");
-                }
-            }
+            SuperBuild[] cores = {null};
+            allconvert.each(i->{
+                if (cores[0]!=null)
+                    return;
+                cores[0] = singleProcessing(i,findBuilds);
+            });
+            //Log.info(cores[0]);
+            return cores[0];
 
-            if (convert3!=null&&convert3.build.team()==build.team()){
-                if (isCore(convert3)){
-                    transportCore.transportCoreB coreB = (transportCore.transportCoreB) convert3;
+        }
+        public SuperBuild singleProcessing(SuperBuild builder,Set<SuperBuild> find){
+            if (builder!=null&&builder.build.team()==build.team()){//Log.info(builder);
+                if (isCore(builder)){
+                    transportCore.transportCoreB coreB = (transportCore.transportCoreB) builder;
                     if (coreB.open) {
-                        return convert3;
+                        return coreB;
                     }
-                }else if (isconv(convert3)){
-                    SuperBuild conv = ((conveyorBelt.conveyorBeltB) convert3).getCore(findBuilds);
-                    if (conv!=null){
-                        return conv;
-                    }
-                }
-            }
-            if (convert4!=null&&convert4.build.team()==build.team()){
-                if (isCore(convert4)){
-                    transportCore.transportCoreB coreB = (transportCore.transportCoreB) convert4;
-                    if (coreB.open) {
-                        return convert4;
-                    }
-                }else if (isconv(convert4)){
-                    SuperBuild conv = ((conveyorBelt.conveyorBeltB) convert4).getCore(findBuilds);
+                }else if (isconv(builder)){
+                    SuperBuild conv = ((conveyorBelt.conveyorBeltB) builder).getCore(find);
                     if (conv!=null){
                         return conv;
                     }
                 }
             }
             return null;
-
         }
         public SuperBuild getthisBuild(int offsetX,int offsetY){
             return WorldTable.getSuperBuilder(Math.round((this.build.x()/8)+offsetX),Math.round((this.build.y()/8)+offsetY));
@@ -117,6 +87,5 @@ public class conveyorBelt extends SuperBlock {
         public boolean isconv(SuperBuild b){
             return b instanceof conveyorBeltB;
         }
-
     }
 }

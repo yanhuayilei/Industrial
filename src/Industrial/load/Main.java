@@ -47,7 +47,9 @@ public class Main extends Plugin {
 
         });
         Events.on(EventType.TapEvent.class,i->{
-            SuperBuild superBuild = WorldTable.getSuperBuilder(i.tile.x,i.tile.y);
+            if (i==null||i.tile==null||i.tile.build==null)
+                return;
+            SuperBuild superBuild = WorldTable.getSuperBuilder(Math.round(i.tile.build.x()/8),Math.round(i.tile.build.y()/8));
             if (superBuild!=null){
                 superBuild.click(PlayerInfo.GetPlayerInfo(i.player));
                 //Log.info("test2");

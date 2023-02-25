@@ -1,6 +1,7 @@
 
 package Industrial.Block;
 
+import Industrial.table.Buildmode;
 import Industrial.table.Menudispose;
 import Industrial.table.PlayerInfo;
 import Industrial.time.ifBuilding;
@@ -10,6 +11,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import arc.Events;
+import arc.struct.Seq;
+import arc.util.Log;
+import mindustry.Vars;
 import mindustry.game.EventType;
 import mindustry.gen.Building;
 import mindustry.gen.Player;
@@ -17,7 +21,7 @@ import mindustry.ui.Menus;
 
 public class SuperBuild implements Runnable {
     public static Menus.MenuListener listener = (player, option) -> {
-        if (PlayerInfo.GetPlayerInfo(player)!=null){
+        if (PlayerInfo.GetPlayerInfo(player)!=null&&PlayerInfo.GetPlayerInfo(player).mode == Buildmode.newEdition){
             PlayerInfo playerInfo = PlayerInfo.GetPlayerInfo(player);
             Menudispose<SuperBuild> menudispose = playerInfo.pull(SuperBuild.class);
             if (menudispose==null)
@@ -68,5 +72,52 @@ public class SuperBuild implements Runnable {
     }
     public void clickProcess(PlayerInfo player,int option){
 
+    }
+    public Seq<Building> neighborhood(){
+        int hornX,hornY,headX,headY;
+        int[] args = getrange();
+        hornX = args[0];
+        hornY = args[1];
+        headX=hornX+build.block().size+1;
+        headY=hornY+build.block().size+1;
+        Seq<Building> all = new Seq<>();
+        int dqX = hornX,dqY = hornY;
+        while (dqX<=headX||dqY<=headY){
+            Building building = Vars.world.build(dqX++,dqY);
+            if (!all.contains(building))
+                all.add(building);
+            if (dqX>=(headX+1)){
+                if (dqY==headY&&dqX>=headX){
+                    break;
+                }
+                dqX = hornX;
+                dqY++;
+            }
+        }
+
+        /*int x1=hornX,y1=hornY+build.block().size+1;
+        int x2=hornX+build.block().size+1,y2 = hornY + build.block.size+1;
+        int x3=hornX,y3=hornY;
+        int x4=hornX+build.block().size+1,y4=hornY;
+        all.remove(Vars.world.build(x1,y1));
+        all.remove(Vars.world.build(x2,y2));
+        all.remove(Vars.world.build(x3,y3));
+        all.remove(Vars.world.build(x4,y4));
+        all.remove(build);*/
+        //Log.info("end");
+        //Log.info("头x:"+headX+",y:"+headY);
+        //Log.info("角x"+hornX+",y"+hornY);
+        return all;
+    }
+    public int[] getrange(){
+        if (build.block().size%2==0){
+            int x1 = Math.round(build.x()/8)-1-(build.block().size/2);
+            int y1 = Math.round(build.y()/8)-1-(build.block().size/2);
+            return new int[]{x1,y1};
+        }else {
+            int x1 = Math.round(build.x()/8)-((build.block().size+1)/2);
+            int y1 = Math.round(build.y()/8)-((build.block().size+1)/2);
+            return new int[] {x1,y1};
+        }
     }
 }
