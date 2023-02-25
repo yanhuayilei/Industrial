@@ -6,12 +6,15 @@
 package Industrial;
 
 import Industrial.Block.SuperBuild;
+import Industrial.Block.loadBlock.structure.loadBlock.Net.ItemNetnode;
+import Industrial.Block.loadBlock.structure.loadBlock.Net.conveyorBelt;
 import Industrial.Block.loadBlock.structure.structure;
 import Industrial.table.Buildmode;
 import Industrial.table.PlayerInfo;
 import Industrial.table.WorldTable;
 import Industrial.time.Task;
 import Industrial.time.Timer;
+import arc.util.Log;
 import mindustry.Vars;
 import mindustry.gen.Call;
 import mindustry.gen.Groups;
@@ -30,7 +33,13 @@ public class PlayerAimBlock {
                         text = text + "当前模式:" + (PlayerInfo.GetPlayerInfo(player).mode == Buildmode.original ? "原版模式" : "插件模式") + "\n";
                         SuperBuild build = WorldTable.getSuperBuilder(Math.round(player.mouseX / 8.0F), Math.round(player.mouseY / 8.0F));
                         if (build != null) {
-                            text = text + "插件方块:" + build.block.name;
+                            text = text + "插件方块:" + build.block.name+"\n";
+                        }
+                        if (build instanceof ItemNetnode.ItemNetnodeB){
+                            //Log.info(build);
+                            text = text + "是否连接网络:";
+                            text+=(((ItemNetnode.ItemNetnodeB)build).core==null?"否\n":"是\n")+"";
+                            text+="频道："+((ItemNetnode.ItemNetnodeB)build).channel+"\n";
                         }
 
                         if (build instanceof structure.structurecB) {
