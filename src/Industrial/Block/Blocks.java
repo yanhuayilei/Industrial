@@ -30,6 +30,8 @@ public class Blocks {
         return DY.indexOf(b) < 0 ? null : (SuperBlock)allBlocks.get(DY.indexOf(b));
     }
     public static Seq<SuperBlock> getAllBlock(Block b){
+        if (!allpair.containsKey(b))
+            allpair.put(b,new Seq<>());
         return allpair.get(b);
     }
 }

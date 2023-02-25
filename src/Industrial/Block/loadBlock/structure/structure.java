@@ -15,12 +15,13 @@ import mindustry.gen.Building;
 import mindustry.gen.Call;
 import mindustry.type.Item;
 import mindustry.ui.Menus;
+import mindustry.world.Block;
 
 public class structure extends SuperBlock {
 
 
-    public structure() {
-        super(Blocks.copperWall, "铜生成机");
+    public structure(Block wall, String tesT) {
+        super(wall,tesT);
     }
 
     public SuperBuild create(Building building) {
