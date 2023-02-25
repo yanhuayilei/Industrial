@@ -38,7 +38,9 @@ public class OutNode extends SuperBlock {
         public boolean acceptOutput(Item item){
             if (item!=null){
                 if (build!=null){
-                    return build.items != null && build.acceptItem(build, item) && build.items.get(item) < build.block().itemCapacity;
+                    if (build.items!=null&&build.acceptItem(build,item)&&build.items.get(item)<build.block().itemCapacity){
+                        return true;
+                    }
                 }
                 return false;
             }else {

@@ -7,6 +7,7 @@ import Industrial.table.Menudispose;
 import Industrial.table.PlayerInfo;
 import Industrial.time.ifBuilding;
 import arc.struct.ObjectMap;
+import arc.struct.Seq;
 import arc.util.Log;
 import mindustry.Vars;
 import mindustry.content.Blocks;
@@ -121,6 +122,13 @@ public class structure extends SuperBlock {
 
         @Override
         public void click(PlayerInfo player) {
+            Seq<Building> all = neighborhood();
+            all.each(i->{
+                if (i==null)
+                    return;
+                player.player.sendMessage(i.block.name+":X:"+i.x()/8+"Y:"+i.y()/8);
+
+            });
             Menudispose menudispose = new Menudispose<SuperBuild>(this);
             addMenu(player,menudispose);
             Call.menu(player.player.con(),SuperBuild.menuid,"Test","Test",new String[][]{{"ok"}});

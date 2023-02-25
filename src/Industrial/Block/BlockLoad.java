@@ -11,6 +11,7 @@ import Industrial.update.Builddead;
 import arc.Events;
 import arc.struct.Seq;
 import arc.util.Log;
+import arc.util.serialization.Jval;
 import mindustry.Vars;
 import mindustry.game.EventType;
 import mindustry.gen.Call;
@@ -28,11 +29,13 @@ public class BlockLoad {
         if (menudispose==null||menudispose.content==null||menudispose.content.tile==null|| Vars.world.build(menudispose.content.tile.x,menudispose.content.tile.y)!=menudispose.content.tile.build)
             return;
         Seq<SuperBlock> allblock = Blocks.getAllBlock(menudispose.content.tile.block());
+        if (allblock == null || option > allblock.size)
+            return;
         EventType.BlockBuildEndEvent i = menudispose.content;
 
 
         SuperBuild build = allblock.get(option).create(i.tile.build);
-        WorldTable.setSuperBuilder(i.tile.build.x() / 8.0F, i.tile.build.y() / 8.0F, build);
+        WorldTable.setSuperBuilder(Math.round(i.tile.build.x() / 8.0F), Math.round(i.tile.build.y() / 8.0F), build);
         Builddead builder = new Builddead(build, build, SuperBuild.allbuildupdate.size());
         build.update = builder;
         SuperBuild.allbuildupdate.add(builder);
@@ -43,17 +46,20 @@ public class BlockLoad {
     public final static int menuid = Menus.registerMenu(listener);
     public static void load() {
         //new Test();
-        new OutNode(mindustry.content.Blocks.titaniumWall,"输出节点");
-        new InpNode(mindustry.content.Blocks.thoriumWall,"输入节点");
+        new structure(mindustry.content.Blocks.copperWall,"test");
+        new OutNode(mindustry.content.Blocks.container,"输出节点");
+        new InpNode(mindustry.content.Blocks.container,"输入节点");
         new transportCore(mindustry.content.Blocks.thoriumWallLarge,"控制器");
         //new ItemNetnode(mindustry.content.Blocks.titaniumWall,"测试节点");
         new conveyorBelt(mindustry.content.Blocks.copperWall,"传输管道");
-        new structure(mindustry.content.Blocks.copperWall,"TesT");
-        new structure(mindustry.content.Blocks.copperWall,"TT");
-        new structure(mindustry.content.Blocks.copperWall,"TTT");
-        new structure(mindustry.content.Blocks.copperWall,"TTTT");
-        new structure(mindustry.content.Blocks.copperWall,"TTTTT");
+        new ItemNetnode(mindustry.content.Blocks.copperWallLarge,"TestNet");
 
+//        new structure(mindustry.content.Blocks.copperWall,"TesT");
+//        new structure(mindustry.content.Blocks.copperWall,"TT");
+//        new structure(mindustry.content.Blocks.copperWall,"TTT");
+//        new structure(mindustry.content.Blocks.copperWall,"TTTT");
+//        new structure(mindustry.content.Blocks.copperWall,"TTTTT");
+        //Log.info(Jval.read("[{\"hi\":10}]"));
     }
 
     public BlockLoad() {
