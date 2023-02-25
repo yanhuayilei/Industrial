@@ -3,23 +3,19 @@ package Industrial.Block.loadBlock.structure;
 
 import Industrial.Block.SuperBlock;
 import Industrial.Block.SuperBuild;
-import Industrial.Block.loadBlock.structure.loadBlock.conv.container;
 import Industrial.table.Menudispose;
 import Industrial.table.PlayerInfo;
-import Industrial.table.WorldTable;
 import Industrial.time.ifBuilding;
 import arc.struct.ObjectMap;
-import arc.struct.Seq;
 import arc.util.Log;
 import mindustry.Vars;
+import mindustry.content.Blocks;
 import mindustry.content.Items;
 import mindustry.gen.Building;
 import mindustry.gen.Call;
 import mindustry.type.Item;
+import mindustry.ui.Menus;
 import mindustry.world.Block;
-
-import java.util.ArrayList;
-import java.util.Set;
 
 public class structure extends SuperBlock {
 
@@ -68,8 +64,8 @@ public class structure extends SuperBlock {
                 }
 
                 if (!this.isallmax[0] && !this.isallmax[1] && !this.isallmax[2] && !this.isallmax[3]) {
-                    if (this.storage.get(Items.copper) < this.maxStorage) {
-                        this.storage.put(Items.copper, this.storage.get(Items.copper) + 1);
+                    if ((Integer)this.storage.get(Items.copper) < this.maxStorage) {
+                        this.storage.put(Items.copper, (Integer)this.storage.get(Items.copper) + 1);
                         addIems(null);
                     } else {
                         this.maxlabel();
@@ -98,14 +94,12 @@ public class structure extends SuperBlock {
             }, 1, this);
             this.maxStorage = 10;
             Vars.content.items().each((item) -> {
-                Integer var10000 = this.storage.put(item, 0);
+                Integer var10000 = (Integer)this.storage.put(item, 0);
             });
         }
 
         public void addIems(Building building) {
-            //Log.info(neighborhood().size());
             Call.label("正在生产...", 1.05F, this.build.x, this.build.y);
-            addFwItem(Industrial.item.Items.getSeq().first(), 1,0);
             if (building != null) {
                 int originalItems = building.items().get(Items.copper);
                 Call.setItem(building, Items.copper, originalItems + 1);
