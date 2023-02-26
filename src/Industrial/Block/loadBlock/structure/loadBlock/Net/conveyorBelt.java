@@ -87,5 +87,6 @@ public class conveyorBelt extends SuperBlock {
         public boolean isconv(SuperBuild b){
             return b instanceof conveyorBeltB;
         }
+
     }
 }

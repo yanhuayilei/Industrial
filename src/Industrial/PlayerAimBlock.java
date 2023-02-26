@@ -8,7 +8,10 @@ package Industrial;
 import Industrial.Block.SuperBuild;
 import Industrial.Block.loadBlock.structure.loadBlock.Net.ItemNetnode;
 import Industrial.Block.loadBlock.structure.loadBlock.Net.conveyorBelt;
+import Industrial.Block.loadBlock.structure.loadBlock.conv.container;
 import Industrial.Block.loadBlock.structure.structure;
+import Industrial.item.Item;
+import Industrial.item.Items;
 import Industrial.table.Buildmode;
 import Industrial.table.PlayerInfo;
 import Industrial.table.WorldTable;
@@ -41,7 +44,9 @@ public class PlayerAimBlock {
                             text+=(((ItemNetnode.ItemNetnodeB)build).core==null?"否\n":"是\n")+"";
                             text+="频道："+((ItemNetnode.ItemNetnodeB)build).channel+"\n";
                         }
-
+                        if (build!=null&&build.block.hasitem){
+                            text+="物品:"+build.store.get(Items.get("小铜"));
+                        }
                         if (build instanceof structure.structurecB) {
                             text = addItemsText(text, build);
                         }

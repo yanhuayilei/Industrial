@@ -34,9 +34,7 @@ public class InpNode extends SuperBlock {
             super(build, block);
             SuperBuild.addTask(task1);
         }
-        public void addItem(){
 
-        }
         public ifBuilding task1 = new ifBuilding(()->{
             //Log.info(core);
             if (core==null||channel==0)

@@ -10,8 +10,11 @@ import mindustry.world.Block;
 
 public class SuperBlock {
     public final Block block;
+    public int maxItem = 0;
     public ObjectMap<Item, Integer> formulation = new ObjectMap();
     public final String name;
+    public boolean hasitem = false;
+    public boolean hasnowitem = false;
 
     public SuperBlock(Block prototype, String name) {
         this.name = name;

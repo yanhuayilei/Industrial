@@ -44,6 +44,11 @@ public class WorldTable {
         }
 
     }
+    public static SuperBuild getSuperBuilder(Building building){
+        if (building==null)
+            return null;
+        return getSuperBuilder(Math.round(building.x()/8),Math.round(building.y()/8));
+    }
 
     public static SuperBuild getSuperBuilder(int x, int y) {
         Building building = Vars.world.build(x,y);
