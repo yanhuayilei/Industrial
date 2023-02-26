@@ -4,8 +4,6 @@ import arc.struct.ObjectMap;
 import arc.struct.Seq;
 
 public class Items {
-    //public static Item 小铜;
-
     private static final ObjectMap<String,Item> allitem = new ObjectMap<>();
     public static void add(Item item) {
         if (item==null)

@@ -4,7 +4,6 @@ import Industrial.PlayerAimBlock;
 import Industrial.Block.BlockLoad;
 import Industrial.Block.SuperBuild;
 import Industrial.item.ItemLoad;
-import Industrial.json.Jsonfactory;
 import Industrial.table.Buildmode;
 import Industrial.table.PlayerInfo;
 import Industrial.table.WorldTable;
@@ -14,7 +13,6 @@ import Industrial.update.updateTask;
 import arc.Events;
 import arc.util.CommandHandler;
 import arc.util.Log;
-import mindustry.Vars;
 import mindustry.game.EventType;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
@@ -27,7 +25,6 @@ public class Main extends Plugin {
     }
 
     public void init() {
-        Jsonfactory.load();
         ItemLoad.load();
         new BlockLoad();
         new PlayerAimBlock();
@@ -51,7 +48,6 @@ public class Main extends Plugin {
             }
 
         });
-        //Vars.world.build(0).back();
         Events.on(EventType.TapEvent.class,i->{
             if (i==null||i.tile==null||i.tile.build==null)
                 return;

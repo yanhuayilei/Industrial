@@ -2,6 +2,8 @@
 package Industrial.Block;
 
 import Industrial.Block.loadBlock.structure.loadBlock.Net.*;
+import Industrial.Block.loadBlock.structure.loadBlock.conv.Itemconveyor;
+import Industrial.Block.loadBlock.structure.loadBlock.conv.container;
 import Industrial.Block.loadBlock.structure.structure;
 import Industrial.table.Buildmode;
 import Industrial.table.Menudispose;
@@ -10,8 +12,6 @@ import Industrial.table.WorldTable;
 import Industrial.update.Builddead;
 import arc.Events;
 import arc.struct.Seq;
-import arc.util.Log;
-import arc.util.serialization.Jval;
 import mindustry.Vars;
 import mindustry.game.EventType;
 import mindustry.gen.Call;
@@ -46,13 +46,23 @@ public class BlockLoad {
     public final static int menuid = Menus.registerMenu(listener);
     public static void load() {
         //new Test();
-        new structure(mindustry.content.Blocks.copperWall,"test");
+        new structure(mindustry.content.Blocks.copperWall,"test"){{
+            hasitem =  true;
+        }};
         new OutNode(mindustry.content.Blocks.container,"输出节点");
         new InpNode(mindustry.content.Blocks.container,"输入节点");
         new transportCore(mindustry.content.Blocks.thoriumWallLarge,"控制器");
         //new ItemNetnode(mindustry.content.Blocks.titaniumWall,"测试节点");
         new conveyorBelt(mindustry.content.Blocks.copperWall,"传输管道");
         new ItemNetnode(mindustry.content.Blocks.copperWallLarge,"TestNet");
+        new Itemconveyor(mindustry.content.Blocks.titaniumConveyor,"传输带"){{
+            maxItem = 10;
+            hasitem = true;
+        }};
+        new container(mindustry.content.Blocks.container,"容器"){{
+            maxItem = 300;
+            hasitem = true;
+        }};
 
 //        new structure(mindustry.content.Blocks.copperWall,"TesT");
 //        new structure(mindustry.content.Blocks.copperWall,"TT");

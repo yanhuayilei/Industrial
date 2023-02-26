@@ -3,7 +3,6 @@ package Industrial.Block.loadBlock.structure.loadBlock.conv;
 import Industrial.Block.SuperBlock;
 import Industrial.Block.SuperBuild;
 import Industrial.item.Item;
-import Industrial.item.Items;
 import Industrial.table.WorldTable;
 import Industrial.time.ifBuilding;
 import arc.util.Log;
@@ -30,7 +29,19 @@ public class Itemconveyor extends SuperBlock {
             SuperBuild.addTask(task3);
         }
 
+        @Override
+        public boolean acceptItem(Item item,int number) {
+            if (item==null)
+                return false;
+            return (store.get(item)+number)<=3;
+        }
 
+        @Override
+        public void addItem(Item item, int number) {
+            if (acceptItem(item,number)){
+                store.add(item,number);
+            }
+        }
 
         public ifBuilding task3 = new ifBuilding(()->{
             SuperBuild target = WorldTable.getSuperBuilder(build.nearby(build.rotation));
