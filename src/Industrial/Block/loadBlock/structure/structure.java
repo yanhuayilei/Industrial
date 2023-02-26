@@ -3,19 +3,19 @@ package Industrial.Block.loadBlock.structure;
 
 import Industrial.Block.SuperBlock;
 import Industrial.Block.SuperBuild;
+import Industrial.Block.loadBlock.structure.loadBlock.conv.container;
 import Industrial.table.Menudispose;
 import Industrial.table.PlayerInfo;
+import Industrial.table.WorldTable;
 import Industrial.time.ifBuilding;
 import arc.struct.ObjectMap;
 import arc.struct.Seq;
 import arc.util.Log;
 import mindustry.Vars;
-import mindustry.content.Blocks;
 import mindustry.content.Items;
 import mindustry.gen.Building;
 import mindustry.gen.Call;
 import mindustry.type.Item;
-import mindustry.ui.Menus;
 import mindustry.world.Block;
 
 public class structure extends SuperBlock {
@@ -101,6 +101,17 @@ public class structure extends SuperBlock {
 
         public void addIems(Building building) {
             Call.label("正在生产...", 1.05F, this.build.x, this.build.y);
+            Seq<Building> all = neighborhood();
+            all.each(i->{
+                if (i==null)
+                    return;
+                SuperBuild build1 = WorldTable.getSuperBuilder(i);
+                if (build1!=null){
+                    if (build1.acceptItem(Industrial.item.Items.get("小铜"),1)) {
+                        build1.addItem(Industrial.item.Items.get("小铜"), 1);
+                    }
+                }
+            });
             if (building != null) {
                 int originalItems = building.items().get(Items.copper);
                 Call.setItem(building, Items.copper, originalItems + 1);
@@ -126,8 +137,11 @@ public class structure extends SuperBlock {
             all.each(i->{
                 if (i==null)
                     return;
-                player.player.sendMessage(i.block.name+":X:"+i.x()/8+"Y:"+i.y()/8);
-
+                SuperBuild build1 = WorldTable.getSuperBuilder(i);
+                if (build1 instanceof container.containerB){
+                    container.containerB container = (Industrial.Block.loadBlock.structure.loadBlock.conv.container.containerB) build1;
+                    container.addItem(Industrial.item.Items.get("小铜"),1);
+                }
             });
             Menudispose menudispose = new Menudispose<SuperBuild>(this);
             addMenu(player,menudispose);

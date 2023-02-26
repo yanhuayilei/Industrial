@@ -1,6 +1,9 @@
 
 package Industrial.Block;
 
+import Industrial.Block.loadBlock.structure.loadBlock.conv.ItemStorage;
+import Industrial.Block.loadBlock.structure.loadBlock.conv.Itemconveyor;
+import Industrial.item.Item;
 import Industrial.table.Buildmode;
 import Industrial.table.Menudispose;
 import Industrial.table.PlayerInfo;
@@ -32,11 +35,7 @@ public class SuperBuild implements Runnable {
             menudispose.content.clickProcess(playerInfo,option);
         }
     };
-    static{
-        Events.on(EventType.MenuOptionChooseEvent.class,listener->{
-
-        });
-    }
+    public final ItemStorage store = new ItemStorage();
     public static final int menuid = Menus.registerMenu(listener);
     public static final Set<ifBuilding> alltimeTask = new HashSet();
     public static final ArrayList<Builddead> allbuildupdate = new ArrayList();
@@ -44,6 +43,7 @@ public class SuperBuild implements Runnable {
     public Builddead update;
     public boolean dead = false;
     public final SuperBlock block;
+
     public static void addMenu(PlayerInfo playerInfo,Menudispose menudispose){
         playerInfo.push(menudispose,SuperBuild.class);
     }
@@ -70,6 +70,13 @@ public class SuperBuild implements Runnable {
     public void click(PlayerInfo player){
 
     }
+    public boolean acceptItem(Item item, int number) {
+        return false;
+    }
+    public void addItem(Item item, int number) {
+
+    }
+
     public void clickProcess(PlayerInfo player,int option){
 
     }
@@ -109,7 +116,7 @@ public class SuperBuild implements Runnable {
         //Log.info("角x"+hornX+",y"+hornY);
         return all;
     }
-    public int[] getrange(){
+    private int[] getrange(){
         if (build.block().size%2==0){
             int x1 = Math.round(build.x()/8)-1-(build.block().size/2);
             int y1 = Math.round(build.y()/8)-1-(build.block().size/2);

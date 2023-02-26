@@ -3,6 +3,7 @@ package Industrial.load;
 import Industrial.PlayerAimBlock;
 import Industrial.Block.BlockLoad;
 import Industrial.Block.SuperBuild;
+import Industrial.item.ItemLoad;
 import Industrial.table.Buildmode;
 import Industrial.table.PlayerInfo;
 import Industrial.table.WorldTable;
@@ -24,6 +25,7 @@ public class Main extends Plugin {
     }
 
     public void init() {
+        ItemLoad.load();
         new BlockLoad();
         new PlayerAimBlock();
         new WorldTable();
