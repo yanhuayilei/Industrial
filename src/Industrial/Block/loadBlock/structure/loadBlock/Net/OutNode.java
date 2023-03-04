@@ -23,7 +23,6 @@ public class OutNode extends SuperBlock {
     }
 
     public static class OutNodeB extends ItemNetnode.ItemNetnodeB{
-        public Building[] blocks = new Building[]{null,null,null,null};
         public OutNodeB(Building build, SuperBlock block) {
             super(build, block);
         }
@@ -32,31 +31,6 @@ public class OutNode extends SuperBlock {
         public void run() {
             if (core!=null&&channel!=0){
                 core.allpair.get(channel).out = this;
-            }
-        }
-
-        public boolean acceptOutput(Item item){
-            if (item!=null){
-                if (build!=null){
-                    return build.items != null && build.acceptItem(build, item) && build.items.get(item) < build.block().itemCapacity;
-                }
-                return false;
-            }else {
-                return false;
-            }
-        }
-        public void addItem(Item item){
-            addItem(item,1);
-        }
-        public void addItem(Item item,int amount){
-            if (item!=null){
-                if (acceptOutput(item)){
-                    if (build!=null){
-                        if (build.items!=null&&build.acceptItem(build,item)&&build.items.get(item)<build.block().itemCapacity){
-                            setupItems.addItem(build,item,amount);
-                        }
-                    }
-                }
             }
         }
 

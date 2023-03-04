@@ -4,17 +4,22 @@ import Industrial.Block.SuperBlock;
 import Industrial.Block.SuperBuild;
 import Industrial.item.Item;
 import Industrial.time.ifBuilding;
+import arc.Events;
 import arc.math.geom.Rect;
 import arc.struct.IntSeq;
 import arc.util.Log;
 import mindustry.Vars;
+import mindustry.content.Blocks;
 import mindustry.entities.UnitSorts;
 import mindustry.entities.Units;
+import mindustry.game.EventType;
 import mindustry.game.Team;
 import mindustry.gen.Building;
 import mindustry.gen.Call;
 import mindustry.gen.Player;
 import mindustry.world.Block;
+
+import java.awt.*;
 
 public class Turret extends SuperBlock {
     public Item cannonball = null;
@@ -46,7 +51,7 @@ public class Turret extends SuperBlock {
                 //    return false;
                 //},UnitSorts.closest)
                 Units.bestTarget(build.team(),build.x(),build.y(),superBlock.range*8,unit -> {
-                    unit.health = 10;
+                    unit.health = 0;
                     islaunch[0] = true;
                     //Log.info(1+unit.toString());
                     //Call.buildHealthUpdate();
@@ -60,8 +65,10 @@ public class Turret extends SuperBlock {
                         return false;
                     islaunch[0] = true;
                     IntSeq seq = new IntSeq();
-                    seq.add(building.pos(),10);
-                    Call.buildHealthUpdate(seq);
+                    seq.add(building.pos(),0);
+                    building.tile().removeNet();
+                    //Call.setTile(building.tile, Blocks.air,build.team(),0);
+                    //Call.buildHealthUpdate(seq);
                     //Log.info(2+building.toString());
                     return false;
                 },UnitSorts.closest);

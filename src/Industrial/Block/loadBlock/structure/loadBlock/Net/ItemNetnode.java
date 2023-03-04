@@ -54,7 +54,7 @@ public class ItemNetnode extends SuperBlock {
                         Run(build);
                         return true;
                     }
-                }else {
+                }else if (isconv(build)){
                     conveyorBelt.conveyorBeltB c = (conveyorBelt.conveyorBeltB) build;
                     SuperBuild core = c.getCore(new HashSet<>());
                     //Log.info("1find2");

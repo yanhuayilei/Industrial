@@ -7,6 +7,7 @@ import Industrial.item.Items;
 import Industrial.table.WorldTable;
 import Industrial.time.ifBuilding;
 import arc.util.Log;
+import mindustry.Vars;
 import mindustry.gen.Building;
 import mindustry.world.Block;
 
@@ -30,7 +31,14 @@ public class Itemconveyor extends SuperBlock {
             SuperBuild.addTask(task3);
         }
 
-
+        @Override
+        public boolean acceptItem(SuperBuild b,Item item, int number) {
+            if (b.build!= build.nearby(build.rotation)) {
+                return super.acceptItem(b, item, number);
+            }else {
+                return false;
+            }
+        }
 
         public ifBuilding task3 = new ifBuilding(()->{
             SuperBuild target = WorldTable.getSuperBuilder(build.nearby(build.rotation));
@@ -40,8 +48,8 @@ public class Itemconveyor extends SuperBlock {
             Item item = store.first();
             if (store.get(item)<1)
                 return;
-            if (target.acceptItem(item,1)){
-                target.addItem(item,1);
+            if (target.acceptItem(this,item,1)){
+                target.addItem(this,item,1);
                 store.add(item,-1);
             }
         },1,this);

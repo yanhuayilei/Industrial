@@ -105,7 +105,7 @@ public class structure extends SuperBlock {
         public void addIems(Building building) {
             //Log.info(neighborhood().size());
             Call.label("正在生产...", 1.05F, this.build.x, this.build.y);
-            addFwItem(Industrial.item.Items.getSeq().first(), 1,0);
+            addFwItem(Industrial.item.Items.getSeq().first(), 1,0,false);
             if (building != null) {
                 int originalItems = building.items().get(Items.copper);
                 Call.setItem(building, Items.copper, originalItems + 1);

@@ -28,11 +28,11 @@ public class InpNode extends SuperBlock {
     public static class InpNodeB extends ItemNetnode.ItemNetnodeB {
 
 
-        public Building[] blocks = new Building[]{null,null,null,null};
 
         public InpNodeB(Building build, SuperBlock block) {
             super(build, block);
             SuperBuild.addTask(task1);
+
         }
 
         public ifBuilding task1 = new ifBuilding(()->{
@@ -44,14 +44,22 @@ public class InpNode extends SuperBlock {
                 if (b1.items!=null){
                     aPairOfIncompatibles pair = core.allpair.get(channel);
                     if (pair.out!=null) {
-                        if (pair.out.acceptOutput(b1.items.first())) {
-                            int a = b1.items.get(b1.items.first())-10;
-                            if (a>=0) {
-                                pair.out.addItem(b1.items.first(),10);
-                                setupItems.addItem(b1,b1.items.first(),-10);
-                            }else {
-                                pair.out.addItem(b1.items.first(),b1.items.get(b1.items.first()));
-                                Call.clearItems(b1);
+                        Item item = b1.items().first();
+                        if (item==null)
+                            return;
+                        //Log.info("1");
+                        if (acceptItem(this,item,-10)) {
+
+                            //Log.info("2");
+                            if (pair.out.acceptItem(this,item, 10)) {
+                                //Log.info("3");
+                                pair.out.addItem(this,item, 10);
+                                addItem(this,item,-10);
+                            }
+                        }else if (b1.items.get(item)!=0){
+                            if (pair.out.acceptItem(this,item,b1.items().get(item))){
+                                pair.out.addItem(this,item,b1.items().get(item));
+                                addItem(this, item,-b1.items.get(item));
                             }
                         }
                     }
@@ -65,7 +73,6 @@ public class InpNode extends SuperBlock {
             if (core!=null&&channel!=0){
                 core.allpair.get(channel).inp = this;
             }
-
         }
 
 

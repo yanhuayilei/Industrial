@@ -47,8 +47,8 @@ public class factory extends SuperBlock {
                                 setupItems.addItem(build, f.out1, f.outam);//加输出
                             }
                         }else {
-                            if (acceptItem(f.out,f.outam)) {
-                                addItem(f.out, f.outam);
+                            if (acceptItem(this,f.out,f.outam)) {
+                                addItem(this,f.out, f.outam);
                                 setupItems.addItem(build,f.inp1,-f.inpam);
                             }
                         }
@@ -62,12 +62,12 @@ public class factory extends SuperBlock {
                         if (f.outisoriginal){
                             if ((setupItems.getItem(build,f.out1)+f.outam)<=block.maxItem) {
                                 setupItems.addItem(build, f.out1, f.outam);
-                                addItem(f.inp, -f.inpam);
+                                addItem(this,f.inp, -f.inpam);
                             }
                         }else {
-                            if (acceptItem(f.out,f.outam)) {
-                                addItem(f.out, f.outam);
-                                addItem(f.inp, -f.inpam);
+                            if (acceptItem(this,f.out,f.outam)) {
+                                addItem(this,f.out, f.outam);
+                                addItem(this,f.inp, -f.inpam);
                             }
                         }
                     }

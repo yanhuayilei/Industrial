@@ -49,9 +49,16 @@ public class BlockLoad {
         //new Test();
         new structure(mindustry.content.Blocks.copperWall,"test"){{
             hasitem =  true;
+
         }};
-        new OutNode(mindustry.content.Blocks.container,"输出节点");
-        new InpNode(mindustry.content.Blocks.container,"输入节点");
+        new OutNode(mindustry.content.Blocks.container,"输出节点"){{
+            hasitem = true;
+            maxItem = 300;
+        }};
+        new InpNode(mindustry.content.Blocks.container,"输入节点"){{
+            hasitem = true;
+            maxItem = 300;
+        }};
         new transportCore(mindustry.content.Blocks.thoriumWallLarge,"控制器");
         //new ItemNetnode(mindustry.content.Blocks.titaniumWall,"测试节点");
         new conveyorBelt(mindustry.content.Blocks.copperWall,"传输管道");

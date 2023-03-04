@@ -4,6 +4,7 @@ package Industrial.Block;
 import Industrial.Block.loadBlock.structure.loadBlock.conv.ItemStorage;
 import Industrial.Block.loadBlock.structure.loadBlock.conv.Itemconveyor;
 import Industrial.item.Item;
+import Industrial.load.setupItems;
 import Industrial.table.Buildmode;
 import Industrial.table.Menudispose;
 import Industrial.table.PlayerInfo;
@@ -69,15 +70,23 @@ public class SuperBuild implements Runnable {
     public void click(PlayerInfo player){
 
     }
-    public boolean acceptItem(Item item, int number) {
-        return block.hasitem&&(store.get(item)+number)<=block.maxItem&&(store.get(item)+number)>=0&&item!=null;
+    public boolean acceptItem(SuperBuild b,Item item, int number) {
+        return block.hasitem&&(store.get(item)+number)<=block.maxItem&&(store.get(item)+number)>0&&item!=null;
     }
-    public void addItem(Item item, int number) {
-        if (acceptItem(item,number)){
+    public boolean acceptItem(SuperBuild b,mindustry.type.Item item,int number){
+        return block.hasitem&&build.items!=null&&(build.items.get(item)+number)<=block.maxItem&&(build.items.get(item)+number)>=0&&item!=null;
+    }
+    public void addItem(SuperBuild b,mindustry.type.Item item,int number){
+        if (acceptItem(b,item,number)){
+            setupItems.addItem(build,item,number);
+        }
+    }
+    public void addItem(SuperBuild b,Item item, int number) {
+        if (acceptItem(b,item,number)){
             store.add(item,number);
         }
     }
-    public boolean addFwItem(Item item,int number,int revolve){
+    public boolean addFwItem(Item item,int number,int revolve,boolean isdeplete){
         ArrayList<Building> allBuild = neighborhood();
         //if (allBuild.size()==1){}
         if (allBuild.size()==0)
@@ -87,13 +96,46 @@ public class SuperBuild implements Runnable {
         }
         SuperBuild b = WorldTable.getSuperBuilder(allBuild.get(revolve++));
         if (b!=null){
-            if (b.acceptItem(item,number)){
-                b.addItem(item,number);
-                return true;
+            if (!isdeplete||acceptItem(this,item,-number)) {
+                if (b.acceptItem(this, item, number)) {
+                    b.addItem(this, item, number);
+                    if (isdeplete) {
+                        addItem(this, item, -number);
+                    }
+                    return true;
+                }
+            }else {
+                return false;
             }
         }
-        return addFwItem(item,number,revolve);
+        return addFwItem(item,number,revolve,isdeplete);
     }
+
+    public boolean addFwItem(mindustry.type.Item item, int number, int revolve,boolean isdeplete){
+        ArrayList<Building> allBuild = neighborhood();
+        //if (allBuild.size()==1){}
+        if (allBuild.size()==0)
+            return false;
+        if (allBuild.size()<=revolve){
+            return false;
+        }
+        SuperBuild b = WorldTable.getSuperBuilder(allBuild.get(revolve++));
+        if (b!=null){
+            if (!isdeplete||acceptItem(this,item,-number)) {
+                if (b.acceptItem(this, item, number)) {
+                    b.addItem(this, item, number);
+                    if (isdeplete) {
+                        addItem(this, item, -number);
+                    }
+                    return true;
+                }
+            }else {
+                return false;
+            }
+        }
+        return addFwItem(item,number,revolve,isdeplete);
+    }
+
     public void clickProcess(PlayerInfo player,int option){
 
     }
@@ -136,7 +178,7 @@ public class SuperBuild implements Runnable {
         all.remove(build);
         return all;
     }
-    private int[] getrange(){
+    public int[] getrange(){
         if (build.block().size%2==0){
             int x1 = Math.round(build.x()/8)-1-(build.block().size/2);
             int y1 = Math.round(build.y()/8)-1-(build.block().size/2);
