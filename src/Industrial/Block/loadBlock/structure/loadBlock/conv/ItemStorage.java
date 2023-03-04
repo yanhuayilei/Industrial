@@ -17,12 +17,26 @@ public class ItemStorage {
         map.put(item,num+number);
     }
     public int get(Item item){
+        if (item==null)
+            return 0;
         return map.get(item);
     }
     public void set(Item item,int number){
         map.put(item,number);
     }
     public Item first(){
-        return Items.get("小铜");
+        boolean[] find = {false};
+        Item[] item = {null};
+        int i = 0;
+            Items.getSeq().each(ii->{
+                if (find[0])
+                    return;
+                if (map.get(ii)!=null){
+                    find[0] = true;
+                    item[0] = ii;
+                }
+            });
+        return item[0];
     }
+
 }

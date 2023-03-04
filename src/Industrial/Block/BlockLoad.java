@@ -4,6 +4,7 @@ package Industrial.Block;
 import Industrial.Block.loadBlock.structure.loadBlock.Net.*;
 import Industrial.Block.loadBlock.structure.loadBlock.conv.Itemconveyor;
 import Industrial.Block.loadBlock.structure.loadBlock.conv.container;
+import Industrial.Block.loadBlock.structure.loadBlock.fort.Turret;
 import Industrial.Block.loadBlock.structure.structure;
 import Industrial.table.Buildmode;
 import Industrial.table.Menudispose;
@@ -63,6 +64,7 @@ public class BlockLoad {
             maxItem = 300;
             hasitem = true;
         }};
+        new Turret(mindustry.content.Blocks.container,"炮台");
 
 //        new structure(mindustry.content.Blocks.copperWall,"TesT");
 //        new structure(mindustry.content.Blocks.copperWall,"TT");

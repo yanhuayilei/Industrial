@@ -28,7 +28,7 @@ public class ItemNetnode extends SuperBlock {
         public Seq<SuperBuild> allconvert = new Seq<>();
         public ifBuilding task = new ifBuilding(()->{
             allconvert = new Seq<>();
-            neighborhood().each(i->{
+            neighborhood().forEach(i->{
                 if (i==null)
                     return;
                 SuperBuild build1 = WorldTable.getSuperBuilder(Math.round(i.x()/8),Math.round(i.y()/8));

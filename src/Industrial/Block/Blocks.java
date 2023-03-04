@@ -27,7 +27,7 @@ public class Blocks {
     }
 
     public static SuperBlock getBlock(Block b) {
-        return DY.indexOf(b) < 0 ? null : (SuperBlock)allBlocks.get(DY.indexOf(b));
+        return DY.indexOf(b) < 0 ? null : allBlocks.get(DY.indexOf(b));
     }
     public static Seq<SuperBlock> getAllBlock(Block b){
         if (!allpair.containsKey(b))

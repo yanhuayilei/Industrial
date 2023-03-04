@@ -33,7 +33,7 @@ public class Builddead implements Runnable {
 
     public void returnItems() {
         Vars.content.items().each((item) -> {
-            int Y = (Integer)this.b.block.formulation.get(item);
+            int Y = this.b.block.formulation.get(item);
             if (Y != 0) {
                 Call.setItem(this.b.build.team().core(), item, Y + this.b.build.team().core().items().get(item));
             }

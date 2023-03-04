@@ -32,5 +32,6 @@ jar{
 
     from(rootDir){
         include "plugin.json"
+        include "demoAdd.json"
     }
 }
