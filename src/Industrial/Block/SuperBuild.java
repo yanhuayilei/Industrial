@@ -7,6 +7,7 @@ import Industrial.item.Item;
 import Industrial.table.Buildmode;
 import Industrial.table.Menudispose;
 import Industrial.table.PlayerInfo;
+import Industrial.table.WorldTable;
 import Industrial.time.ifBuilding;
 import Industrial.update.Builddead;
 import java.util.ArrayList;
@@ -50,9 +51,7 @@ public class SuperBuild implements Runnable {
 
     public static void addTask(ifBuilding build) {
         if (!build.build.dead) {
-            if (!alltimeTask.contains(build)) {
-                alltimeTask.add(build);
-            }
+            alltimeTask.add(build);
 
         }
     }
@@ -71,28 +70,48 @@ public class SuperBuild implements Runnable {
 
     }
     public boolean acceptItem(Item item, int number) {
-        return false;
+        return block.hasitem&&(store.get(item)+number)<=block.maxItem&&(store.get(item)+number)>=0&&item!=null;
     }
     public void addItem(Item item, int number) {
-
+        if (acceptItem(item,number)){
+            store.add(item,number);
+        }
     }
-
+    public boolean addFwItem(Item item,int number,int revolve){
+        ArrayList<Building> allBuild = neighborhood();
+        //if (allBuild.size()==1){}
+        if (allBuild.size()==0)
+            return false;
+        if (allBuild.size()<=revolve){
+            return false;
+        }
+        SuperBuild b = WorldTable.getSuperBuilder(allBuild.get(revolve++));
+        if (b!=null){
+            if (b.acceptItem(item,number)){
+                b.addItem(item,number);
+                return true;
+            }
+        }
+        return addFwItem(item,number,revolve);
+    }
     public void clickProcess(PlayerInfo player,int option){
 
     }
-    public Seq<Building> neighborhood(){
+    public ArrayList<Building> neighborhood(){
         int hornX,hornY,headX,headY;
         int[] args = getrange();
         hornX = args[0];
         hornY = args[1];
         headX=hornX+build.block().size+1;
         headY=hornY+build.block().size+1;
-        Seq<Building> all = new Seq<>();
+        ArrayList<Building> all = new ArrayList<>();
         int dqX = hornX,dqY = hornY;
         while (dqX<=headX||dqY<=headY){
             Building building = Vars.world.build(dqX++,dqY);
-            if (!all.contains(building))
+            if (!all.contains(building)&&building!=null) {
                 all.add(building);
+                //Log.info(building);
+            }
             if (dqX>=(headX+1)){
                 if (dqY==headY&&dqX>=headX){
                     break;
@@ -114,6 +133,7 @@ public class SuperBuild implements Runnable {
         //Log.info("end");
         //Log.info("头x:"+headX+",y:"+headY);
         //Log.info("角x"+hornX+",y"+hornY);
+        all.remove(build);
         return all;
     }
     private int[] getrange(){

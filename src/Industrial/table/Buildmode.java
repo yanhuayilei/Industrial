@@ -5,6 +5,6 @@ public enum Buildmode {
     original,
     newEdition;
 
-    private Buildmode() {
+    Buildmode() {
     }
 }

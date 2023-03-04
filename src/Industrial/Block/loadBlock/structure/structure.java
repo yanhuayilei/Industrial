@@ -18,6 +18,9 @@ import mindustry.gen.Call;
 import mindustry.type.Item;
 import mindustry.world.Block;
 
+import java.util.ArrayList;
+import java.util.Set;
+
 public class structure extends SuperBlock {
 
 
@@ -65,8 +68,8 @@ public class structure extends SuperBlock {
                 }
 
                 if (!this.isallmax[0] && !this.isallmax[1] && !this.isallmax[2] && !this.isallmax[3]) {
-                    if ((Integer)this.storage.get(Items.copper) < this.maxStorage) {
-                        this.storage.put(Items.copper, (Integer)this.storage.get(Items.copper) + 1);
+                    if (this.storage.get(Items.copper) < this.maxStorage) {
+                        this.storage.put(Items.copper, this.storage.get(Items.copper) + 1);
                         addIems(null);
                     } else {
                         this.maxlabel();
@@ -95,23 +98,14 @@ public class structure extends SuperBlock {
             }, 1, this);
             this.maxStorage = 10;
             Vars.content.items().each((item) -> {
-                Integer var10000 = (Integer)this.storage.put(item, 0);
+                Integer var10000 = this.storage.put(item, 0);
             });
         }
 
         public void addIems(Building building) {
+            //Log.info(neighborhood().size());
             Call.label("正在生产...", 1.05F, this.build.x, this.build.y);
-            Seq<Building> all = neighborhood();
-            all.each(i->{
-                if (i==null)
-                    return;
-                SuperBuild build1 = WorldTable.getSuperBuilder(i);
-                if (build1!=null){
-                    if (build1.acceptItem(Industrial.item.Items.get("小铜"),1)) {
-                        build1.addItem(Industrial.item.Items.get("小铜"), 1);
-                    }
-                }
-            });
+            addFwItem(Industrial.item.Items.getSeq().first(), 1,0);
             if (building != null) {
                 int originalItems = building.items().get(Items.copper);
                 Call.setItem(building, Items.copper, originalItems + 1);
@@ -133,16 +127,6 @@ public class structure extends SuperBlock {
 
         @Override
         public void click(PlayerInfo player) {
-            Seq<Building> all = neighborhood();
-            all.each(i->{
-                if (i==null)
-                    return;
-                SuperBuild build1 = WorldTable.getSuperBuilder(i);
-                if (build1 instanceof container.containerB){
-                    container.containerB container = (Industrial.Block.loadBlock.structure.loadBlock.conv.container.containerB) build1;
-                    container.addItem(Industrial.item.Items.get("小铜"),1);
-                }
-            });
             Menudispose menudispose = new Menudispose<SuperBuild>(this);
             addMenu(player,menudispose);
             Call.menu(player.player.con(),SuperBuild.menuid,"Test","Test",new String[][]{{"ok"}});

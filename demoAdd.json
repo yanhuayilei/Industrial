@@ -1,0 +1,26 @@
+[
+  {
+    "type": "item",
+    "name": "小铜"
+  },
+  {
+    "type": "factory",
+    "maxItem": 10,
+    "name": "fA",
+    "block": "container",
+    "hasItem": true,
+    "item": {
+      "time": 1,
+      "out": {
+        "isoriginal": true,
+        "item": "copper",
+        "amount": 1
+      },
+      "inp": {
+        "isoriginal": false,
+        "item": "小铜",
+        "amount": 1
+      }
+    }
+  }
+]
