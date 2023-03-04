@@ -21,19 +21,5 @@ public class container extends SuperBlock {
         public containerB(Building build, SuperBlock block) {
             super(build, block);
         }
-
-        @Override
-        public boolean acceptItem(Item item, int number) {
-            if (item==null)
-                return false;
-            return (store.get(item)+number)<=200;
-        }
-
-        @Override
-        public void addItem(Item item, int number) {
-            if (acceptItem(item,number)){
-                store.add(item,number);
-            }
-        }
     }
 }

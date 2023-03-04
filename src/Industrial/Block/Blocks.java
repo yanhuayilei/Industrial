@@ -34,9 +34,4 @@ public class Blocks {
             allpair.put(b,new Seq<>());
         return allpair.get(b);
     }
-    public static Seq<SuperBlock> getAllBlock(Block b){
-        if (!allpair.containsKey(b))
-            allpair.put(b,new Seq<>());
-        return allpair.get(b);
-    }
 }

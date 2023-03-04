@@ -33,7 +33,7 @@ public class conveyorBelt extends SuperBlock {
         public Seq<SuperBuild> allconvert = new Seq<>();
         public SuperBuild getCore(Set<SuperBuild> findBuilds){
             allconvert = new Seq<>();
-            neighborhood().each(i->{
+            neighborhood().forEach(i->{
                 //Log.info(i);
                 if (i==null)
                     return;
@@ -71,9 +71,7 @@ public class conveyorBelt extends SuperBlock {
                     }
                 }else if (isconv(builder)){
                     SuperBuild conv = ((conveyorBelt.conveyorBeltB) builder).getCore(find);
-                    if (conv!=null){
-                        return conv;
-                    }
+                    return conv;
                 }
             }
             return null;
