@@ -14,11 +14,13 @@ import Industrial.update.updateTask;
 import arc.Events;
 import arc.util.CommandHandler;
 import arc.util.Log;
+import arc.util.serialization.Jval;
 import mindustry.Vars;
 import mindustry.game.EventType;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
 import mindustry.mod.Plugin;
+import mindustry.ui.Fonts;
 
 public class Main extends Plugin {
     public static updateTask update;
@@ -78,6 +80,24 @@ public class Main extends Plugin {
         });
         handler.register("debug", "debug",  (CommandHandler.CommandRunner<Player>)  (args, player) -> {
             player.sendMessage(Timer.allTime.size + "::" + SuperBuild.alltimeTask.size() + "::" + PlayerInfo.ListInfo.size() + "::" + Groups.player.size());
+        });
+        handler.register("add","<json>",(CommandHandler.CommandRunner<Player> )(arg,pl)->{
+            if (arg.length!=0){
+                String json = arg[0];
+                if (json==null||json.equals("")) {
+                    pl.sendMessage("是空");
+                    return;
+                }
+                Jval jval = Jval.read(json);
+                for (Jval jval1: jval.asArray().list()){
+                    try {
+                        Jsonfactory.enrollItem(jval1);
+                        Jsonfactory.enrollBlock(jval1);
+                    }catch (Exception e){
+                        pl.sendMessage(e.toString());
+                    }
+                }
+            }
         });
     }
 }

@@ -1,7 +1,10 @@
 
 package Industrial.table;
 
+import Industrial.Block.Blocks;
+import Industrial.Block.SuperBlock;
 import Industrial.Block.SuperBuild;
+import Industrial.json.Jsonfactory;
 import arc.Events;
 import arc.util.Log;
 import mindustry.Vars;
@@ -36,6 +39,10 @@ public class WorldTable {
                 }
 
                 Log.info("重置所有更新");
+                for (Object build:Jsonfactory.jsonBlock.toArray()){
+                    Blocks.remove((SuperBlock) build);
+                }
+                Jsonfactory.jsonBlock.clear();
             });
             Events.on(EventType.WorldLoadEndEvent.class, (i) -> {
                 allBuild = new SuperBuild[Vars.world.width()][Vars.world.height()];
