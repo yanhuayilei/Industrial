@@ -81,7 +81,8 @@ public class Main extends Plugin {
         handler.register("debug", "debug",  (CommandHandler.CommandRunner<Player>)  (args, player) -> {
             player.sendMessage(Timer.allTime.size + "::" + SuperBuild.alltimeTask.size() + "::" + PlayerInfo.ListInfo.size() + "::" + Groups.player.size());
         });
-        handler.register("add","<json>",(CommandHandler.CommandRunner<Player> )(arg,pl)->{
+        //handler.regist,)
+        handler.register("add","[json]","add a json",(CommandHandler.CommandRunner<Player> )(arg,pl)->{
             if (arg.length!=0){
                 String json = arg[0];
                 if (json==null||json.equals("")) {

@@ -39,8 +39,8 @@ public class WorldTable {
                 }
 
                 Log.info("重置所有更新");
-                for (Object build:Jsonfactory.jsonBlock.toArray()){
-                    Blocks.remove((SuperBlock) build);
+                for (SuperBlock build:Jsonfactory.jsonBlock){
+                    Blocks.remove(build);
                 }
                 Jsonfactory.jsonBlock.clear();
             });
